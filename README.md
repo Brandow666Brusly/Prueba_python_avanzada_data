@@ -39,6 +39,8 @@ raiz_del_proyecto/
 │   ├── log.py               # Generación de logs.
 │   ├── visualization.py     # Generación de visualizaciones.
 ├── data/                    # Carpeta de datos (incluye catalogo.txt e imágenes).
+├── database/
+│   └── exported_db.sql      # Archivo exportado de la base de datos.
 ├── config.ini               # Archivo de configuración.
 ├── requirements.txt         # Dependencias de Python.
 ├── README.md                # Documentación del proyecto.
@@ -64,11 +66,11 @@ env\Scripts\activate     # En Windows
 pip install -r requirements.txt
 ```
 
-### **4. Configurar PostgreSQL**
-- Importa la base de datos exportada que se incluye en este proyecto.
-  Para ello, utiliza el archivo SQL proporcionado (por ejemplo, `exported_db.sql`) con el siguiente comando:
+### **4. Importar la Base de Datos**
+- El archivo SQL exportado de la base de datos se encuentra en la carpeta `database/` del proyecto.
+- Para importar la base de datos, utiliza el siguiente comando:
   ```bash
-  psql -U postgres -d images_migration -f exported_db.sql
+  psql -U postgres -d images_migration -f database/exported_db.sql
   ```
 
 - Configura `config.ini` con los detalles de tu conexión a PostgreSQL:
