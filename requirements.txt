@@ -1,0 +1,5 @@
+psycopg2        # Para conexión con PostgreSQL
+pandas          # Para procesamiento de datos (catalogo.txt)
+configparser    # Para leer el config.ini
+python-dotenv   # Para el uso de .env
+matplotlib      # Para las visualizaciones de la imagenes
