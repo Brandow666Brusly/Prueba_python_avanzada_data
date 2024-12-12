@@ -1,131 +1,109 @@
-+---------------------------------------------------------------------------------------------+
-|                 PROYECTO DE MIGRACIÓN Y ANÁLISIS DE DATOS DE IMÁGENES                        |
-+---------------------------------------------------------------------------------------------+
+# **Prueba Python Avanzada - Migración y Análisis de Datos**
 
-+---------------------------------------+-----------------------------------------------------+
-| Descripción del Proyecto     | Este proyecto analiza, migra y clasifica imágenes             |
-|                              | (.png) tomando como base un archivo catalogo.txt,             |
-|                              | almacenando la información en PostgreSQL y generando          |
-|                              | un log con el estado final de cada imagen.                    |
-+---------------------------------------+-----------------------------------------------------+
+## **Descripción del Proyecto**
+Este proyecto es una solución técnica que utiliza Python y PostgreSQL para realizar la migración y análisis de datos relacionados con imágenes. El objetivo principal es clasificar, procesar y almacenar información sobre imágenes presentes en un sistema de archivos, comparándolas con los datos existentes en un archivo `catalogo.txt` y subiendo esta información a una base de datos PostgreSQL.
 
-+-----------------------------+---------------------------------------------------------------+
-| Objetivos                   | - Cargar datos desde catalogo.txt a PostgreSQL                |
-|                             | - Identificar imágenes en el directorio vs. la BD             |
-|                             | - Clasificar por categoría e insertar en                     |
-|                             |   migracion_propiedades_archivos                              |
-|                             | - Generar un log final con estado de las imágenes             |
-|                             | - (Opcional) Visualizaciones y dockerización                 |
-+-----------------------------+---------------------------------------------------------------+
+---
 
-+-----------------------------------+---------------------------------------------------------+
-| Requerimientos                    | - Python 3.10+                                          |
-|                                   | - PostgreSQL 14+                                        |
-|                                   | - Librerías (ver requirements.txt)                      |
-|                                   | - Docker (opcional)                                     |
-+-----------------------------------+---------------------------------------------------------+
+## **Objetivos**
+- Leer el archivo `catalogo.txt` y cargar las imágenes y sus categorías en PostgreSQL.
+- Identificar imágenes presentes físicamente en el sistema de archivos.
+- Comparar las imágenes con los datos en la base de datos.
+- Generar un log detallado de la migración que incluya:
+  - Imágenes presentes (en sistema de archivos y base de datos).
+  - Imágenes ausentes (en base de datos pero no en el sistema de archivos).
+  - Imágenes no catalogadas (en el sistema de archivos pero no en la base de datos).
 
-+-----------------------------------+---------------------------------------------------------+
-| Estructura de Archivos/Directorios|                                                         |
-|                                   | raiz_del_proyecto/                                      |
-|                                   | ├─ src/                                                 |
-|                                   | │  ├─ main.py (principal)                               |
-|                                   | │  ├─ logic.py (lógica)                                 |
-|                                   | │  ├─ db.py (conexión BD)                               |
-|                                   | │  ├─ log.py (generar log final)                        |
-|                                   | │  ├─ visualization.py (opcional)                       |
-|                                   | │                                                       |
-|                                   | ├─ data/ (catalogo.txt, IMAGENES/)                      |
-|                                   | ├─ sql/ (create_tables.sql)                             |
-|                                   | ├─ docker/ (Dockerfile, docker-compose.yaml)            |
-|                                   | ├─ visualizaciones/                                     |
-|                                   | ├─ config.ini                                           |
-|                                   | ├─ requirements.txt                                     |
-|                                   | ├─ README.md                                            |
-+-----------------------------------+---------------------------------------------------------+
+---
 
-+-----------------------------------+---------------------------------------------------------+
-| Instalación Local (Sin Docker)    |                                                         |
-|                                   | 1. Clonar repositorio:                                  |
-|                                   |    ```                                                 |
-|                                   |    git clone https://github.com/usuario/proyecto.git    |
-|                                   |    cd proyecto                                          |
-|                                   |    ```                                                 |
-|                                   |                                                         |
-|                                   | 2. Crear entorno virtual:                               |
-|                                   |    ```                                                 |
-|                                   |    python3 -m venv venv                                 |
-|                                   |    source venv/bin/activate (Linux/Mac)                 |
-|                                   |    venv\Scripts\activate (Win)                         |
-|                                   |    ```                                                 |
-|                                   |                                                         |
-|                                   | 3. Instalar dependencias:                               |
-|                                   |    ```                                                 |
-|                                   |    pip install -r requirements.txt                      |
-|                                   |    ```                                                 |
-|                                   |                                                         |
-|                                   | 4. Configurar config.ini (credenciales BD)              |
-|                                   |                                                         |
-|                                   | 5. Crear tablas:                                        |
-|                                   |    ```                                                 |
-|                                   |    psql -U postgres -d images_migration -f sql/create_tables.sql |
-|                                   |    ```                                                 |
-+-----------------------------------+---------------------------------------------------------+
+## **Requerimientos**
+### **Software Necesario**
+- Python 3.10 o superior.
+- PostgreSQL 13 o superior.
+- Git para control de versiones.
 
-+-----------------------------------+---------------------------------------------------------+
-| Ejecución del Proyecto (Local)    | Correr proceso completo:                                |
-|                                   |    ```                                                 |
-|                                   |    python src/main.py                                   |
-|                                   |    ```                                                 |
-|                                   |                                                         |
-|                                   | Generar visualizaciones:                                |
-|                                   |    ```                                                 |
-|                                   |    python src/visualization.py                          |
-|                                   |    ```                                                 |
-+-----------------------------------+---------------------------------------------------------+
+### **Dependencias de Python**
+Las dependencias necesarias están listadas en `requirements.txt`. Puedes instalarlas ejecutando:
+```bash
+pip install -r requirements.txt
+```
+---
 
-+-----------------------------------+---------------------------------------------------------+
-| Ejecución con Docker (Opcional)   | 1. Construir imagen:                                    |
-|                                   |    ```                                                 |
-|                                   |    docker-compose build                                 |
-|                                   |    ```                                                 |
-|                                   |                                                         |
-|                                   | 2. Levantar servicios:                                  |
-|                                   |    ```                                                 |
-|                                   |    docker-compose up                                    |
-|                                   |    ```                                                 |
-+-----------------------------------+---------------------------------------------------------+
+## **Estructura del Proyecto**
+```
+raiz_del_proyecto/
+├── src/
+│   ├── main.py              # Script principal.
+│   ├── logic.py             # Lógica principal.
+│   ├── db.py                # Funciones para base de datos.
+│   ├── log.py               # Generación de logs.
+│   ├── visualization.py     # Generación de visualizaciones.
+├── data/                    # Carpeta de datos (incluye catalogo.txt e imágenes).
+├── config.ini               # Archivo de configuración.
+├── requirements.txt         # Dependencias de Python.
+├── README.md                # Documentación del proyecto.
+```
+---
 
-+-----------------------------------+---------------------------------------------------------+
-| Exportar la Base de Datos          | ```                                                    |
-|                                   | pg_dump -U postgres -h localhost -p 5432                |
-|                                   | -d images_migration -F p -f export/dump.sql             |
-|                                   | ```                                                    |
-+-----------------------------------+---------------------------------------------------------+
+## **Instalación y Configuración**
+### **1. Clonar el Repositorio**
+```bash
+git clone https://github.com/Brandow666Brusly/Prueba_python_avanzada_data.git
+cd Prueba_python_avanzada_data
+```
 
-+-----------------------------------+---------------------------------------------------------+
-| Detalles de Conexión PostgreSQL   | Ajustar config.ini con credenciales correctas.          |
-|                                   | Host = localhost (o db en docker), user = postgres, etc.|
-+-----------------------------------+---------------------------------------------------------+
+### **2. Configurar el Entorno Virtual**
+```bash
+python -m venv env
+source env/bin/activate   # En Linux/Mac
+env\Scripts\activate     # En Windows
+```
 
-+-----------------------------------+---------------------------------------------------------+
-| Ejemplos de Uso                   | Log final (ejemplo):                                    |
-|                                   | ```                                                    |
-|                                   | ===== LOG DE MIGRACIÓN =====                            |
-|                                   | *** Imágenes Presentes ***                              |
-|                                   | Imagen: 0520...001.png | Categoría: Servicios Adic.     |
-|                                   | Estado: Presente                                        |
-|                                   | ...                                                    |
-|                                   | ===== FIN LOG =====                                     |
-|                                   | ```                                                    |
-+-----------------------------------+---------------------------------------------------------+
+### **3. Instalar Dependencias**
+```bash
+pip install -r requirements.txt
+```
 
-+-----------------------------------+---------------------------------------------------------+
-| Resolución de Problemas Comunes    | - Si no conecta a BD: revisar config.ini                |
-|                                   | - No encuentra catalogo.txt: revisar data_dir en config |
-|                                   | - Errores de dependencias: reinstalar requerimientos    |
-+-----------------------------------+---------------------------------------------------------+
+### **4. Configurar PostgreSQL**
+- Importa la base de datos exportada que se incluye en este proyecto.
+  Para ello, utiliza el archivo SQL proporcionado (por ejemplo, `exported_db.sql`) con el siguiente comando:
+  ```bash
+  psql -U postgres -d images_migration -f exported_db.sql
+  ```
 
-+-----------------------------------+---------------------------------------------------------+
-| Contribuciones y Licencia          | Contributions bienvenidas, Licencia MIT (ejemplo)       |
-+-----------------------------------+---------------------------------------------------------+
+- Configura `config.ini` con los detalles de tu conexión a PostgreSQL:
+  ```ini
+  [database]
+  host = localhost
+  user = postgres
+  password = Pollito
+  port = 5432
+  dbname = images_migration
+
+  [paths]
+  data_dir = data
+  directorio_carpeta_padre = contenedor_padre
+  ```
+
+---
+
+## **Ejecución del Proyecto**
+1. Ejecuta el script principal:
+   ```bash
+   python src/main.py
+   ```
+2. Los resultados de la migración se mostrarán en la consola y se generará un log con los detalles.
+
+---
+
+## **Resultados Esperados**
+- Log detallado en consola con el estado de las imágenes.
+- Visualización generada en la carpeta `visualizaciones/`.
+- Datos migrados exitosamente a la base de datos PostgreSQL.
+
+---
+
+## **Contacto**
+- **Autor:** Brandow666Brusly
+- **Email:** bruslybrandow@gmail.com
+- **Repositorio:** [GitHub](https://github.com/Brandow666Brusly/Prueba_python_avanzada_data)
