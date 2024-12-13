@@ -1,6 +1,4 @@
-# src/log.py
-
-def print_log(presentes, ausentes, no_catalogadas, info):
+def imprimir_log(presentes, ausentes, no_catalogadas, info):
     """
     Imprime el log final de la migración.
     info: dict {nombre_archivo: categoria}
@@ -22,7 +20,6 @@ def print_log(presentes, ausentes, no_catalogadas, info):
     # No catalogada
     print("\n*** Imágenes No Catalogadas (En FS pero no en BD) ***")
     for img in sorted(no_catalogadas):
-        # Si la imagen no está en la BD, no tendremos su categoría, se podría dejar como 'No disponible'
         print(f"Imagen: {img} | Categoría: No disponible | Estado: No catalogada")
 
     print("\n===== FIN DEL LOG DE MIGRACIÓN =====")
